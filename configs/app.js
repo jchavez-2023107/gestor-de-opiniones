@@ -1,51 +1,71 @@
-//Levantar servidor express (HTTP)
-
-//Modular | + efectiva + legible | trabaja en funciones
-
+// configs/app.js
 "use strict";
 
-//ECModules | ESModules
-import express from "express"; //Servidor HTTP
-import morgan from "morgan"; //Logs
-import helmet from "helmet"; //Seguridad para HTTP
-import cors from "cors"; //Acceso al API
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cors from "cors";
+import { limiter } from "../middlewares/rate.limit.js"; // Opcional
 
-//Importamos las rutas de las entidades a trabajar.
+// Importamos la función que registra TODAS las rutas
+import { rutasGenerales } from "../src/rutas.generales.js";
 
+/**
+ * Función para configurar middlewares globales.
+ */
+function configs(app) {
+  app.use(morgan("dev")); // Logs de peticiones HTTP
+  app.use(helmet()); // Seguridad de cabeceras
+  app.use(cors()); // Permitir CORS
+  app.use(express.json()); // Parsear JSON en requests
+  app.use(express.urlencoded({ extended: true })); // Para x-www-form-urlencoded
 
-//El dotenv
-import dotenv from "dotenv";
-//import { limiter } from "../middlewares/rate.limit.js";
-dotenv.config(); // <-- Asegura que .env se cargue correctamente
-
-//El dotenv
-import dotenv from "dotenv";
-//import { limiter } from "../middlewares/rate.limit.js";
-dotenv.config(); // <-- Asegura que .env se cargue correctamente
-
-
-//Cuando tengamos rutas.
-// ✅ Carga de rutas
-const routes = (app) => {
-
+  // (Opcional) Rate limiting
+  // app.use(limiter);
 }
 
-//Ejecutamos el servidor
+/**
+ * Función para cargar las rutas (rutasGenerales).
+ */
+function loadRoutes(app) {
+  rutasGenerales(app);
+}
+
+/**
+ * Middleware final para manejo de errores (opcional).
+ * Captura errores que se envíen con next() y responde en JSON.
+ */
+function errorHandler(err, req, res, next) {
+  if (Array.isArray(err?.errors)) {
+    return res.status(400).json({ errors: err.errors });
+  }
+  console.error("❌ Error capturado:", err);
+  return res.status(500).json({ message: "Internal Server Error" });
+}
+
+/**
+ * Función que inicializa el servidor.
+ */
 export const initServer = () => {
-    //Crear instancia de express
-    const app = express(); //Instancia de express
-    try {
-      //servidor : app.
-      configs(app);
-      routes(app);
-      //puerto en el que corre: 2636.
-      app.listen(process.env.PORT);
-      //Impresión sobre el puerto en el que corre.
-      console.log(`Server running on port ${process.env.PORT}`);
-    } catch (err) {
-      //Impresión del fallo de inicialización del servidor, impresión del error.
-      console.error("Server init failed", err);
-      process.exit(1); // Cierra el proceso si hay error
-    }
-  };
-  
+  const app = express();
+
+  try {
+    // 1) Configuramos middlewares globales
+    configs(app);
+
+    // 2) Cargamos las rutas
+    loadRoutes(app);
+
+    // 3) Middleware final de errores (después de montar rutas)
+    app.use(errorHandler);
+
+    // 4) Iniciamos el servidor en el puerto definido en .env o 2636
+    const port = process.env.PORT || 2636;
+    app.listen(port, () => {
+      console.log(`✅ Server running on port ${port}`);
+    });
+  } catch (err) {
+    console.error("❌ Server init failed:", err);
+    process.exit(1);
+  }
+};

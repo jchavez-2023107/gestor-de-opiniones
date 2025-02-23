@@ -1,10 +1,14 @@
-// El archivo encargado de ejecutar el proyecto (Levantarlo)
+// index.js
+"use strict";
 
-    //Desestructurar
-import { initServer } from "./configs/app.js";
-import { config } from "dotenv";
+import dotenv from "dotenv";
+dotenv.config(); // Se cargan variables de entorno
+
 import { connect } from "./configs/mongo.js";
+import { initServer } from "./configs/app.js";
 
-config()
-connect()
-initServer()
+// Conexión a MongoDB
+connect();
+
+// Inicializar el servidor Express
+initServer();
