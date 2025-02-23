@@ -251,10 +251,14 @@ const agregarUsuariosPorDefecto = async () => {
         },
       ];
       await User.insertMany(usuariosPorDefecto);
-      console.log("Usuarios por defecto agregados");
+      console.log("✅ Se crearon los usuarios por defecto (ADMIN y CLIENT)");
+    } else {
+      console.log(
+        "ℹ️ Ya existen usuarios en la base de datos, no se crearon usuarios por defecto"
+      );
     }
   } catch (error) {
-    console.error("Error al agregar usuarios por defecto:", error);
+    console.error("❌ Error al agregar usuarios por defecto:", error);
   }
 };
 agregarUsuariosPorDefecto();
