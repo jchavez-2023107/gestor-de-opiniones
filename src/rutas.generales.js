@@ -1,11 +1,10 @@
-// rutasGenerales.js
 "use strict";
 
-// Importa aquí todas las rutas que quieras unificar
+// Importación de todas las rutas a unificar
 import authRoutes from "../src/auth/auth.routes.js";
 import userRoutes from "../src/users/user.routes.js";
 import categoriaRoutes from "./categorias/categoria.routes.js";
-// ... y así con más rutas (publicaciones, comentarios, categorías, etc.)
+import publicacionRoutes from "./publicaciones/publicacion.routes.js";
 
 /**
  * Función que recibe la app de Express y registra
@@ -15,7 +14,7 @@ export const rutasGenerales = (app) => {
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
   app.use("/api/categorias", categoriaRoutes);
-  // app.use("/api/publicaciones", publicacionesRoutes);
+  app.use("/api/publicaciones", publicacionRoutes);
   // app.use("/api/comentarios", comentariosRoutes);
   // etc...
 };

@@ -1,0 +1,143 @@
+{
+    "info": {
+      "_postman_id": "babfe01f-9c11-4c57-8b8b-8acfebd87e96",
+      "name": "Gestor de Opiniones - Publicaciones",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Login (User or Admin)",
+        "request": {
+          "method": "POST",
+          "header": [
+            { "key": "Content-Type", "value": "application/x-www-form-urlencoded", "type": "text" }
+          ],
+          "body": {
+            "mode": "urlencoded",
+            "urlencoded": [
+              { "key": "userlogin", "value": "mperez", "type": "text" },
+              { "key": "password", "value": "12345678Aa!", "type": "text" }
+            ]
+          },
+          "url": {
+            "raw": "http://localhost:2636/api/auth/login",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "2636",
+            "path": ["api", "auth", "login"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Create Publication",
+        "request": {
+          "method": "POST",
+          "header": [
+            { "key": "Content-Type", "value": "application/x-www-form-urlencoded", "type": "text" },
+            { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+          ],
+          "body": {
+            "mode": "urlencoded",
+            "urlencoded": [
+              { "key": "title", "value": "Mi primera publicación", "type": "text" },
+              { "key": "content", "value": "Este es el contenido de la publicación", "type": "text" },
+              {
+                "key": "category",
+                "value": "{{categoryId}}",
+                "type": "text",
+                "description": "ID de la categoría a la que pertenece la publicación"
+              }
+            ]
+          },
+          "url": {
+            "raw": "http://localhost:2636/api/publicaciones",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "2636",
+            "path": ["api", "publicaciones"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Get All Publications",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:2636/api/publicaciones",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "2636",
+            "path": ["api", "publicaciones"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Get Publication by ID",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:2636/api/publicaciones/{{publicationId}}",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "2636",
+            "path": ["api", "publicaciones", "{{publicationId}}"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Update Publication",
+        "request": {
+          "method": "PUT",
+          "header": [
+            { "key": "Content-Type", "value": "application/x-www-form-urlencoded", "type": "text" },
+            { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+          ],
+          "body": {
+            "mode": "urlencoded",
+            "urlencoded": [
+              { "key": "title", "value": "Título Actualizado", "type": "text" },
+              { "key": "content", "value": "Contenido actualizado", "type": "text" },
+              {
+                "key": "category",
+                "value": "{{anotherCategoryId}}",
+                "type": "text",
+                "description": "ID de otra categoría si deseas cambiarla"
+              }
+            ]
+          },
+          "url": {
+            "raw": "http://localhost:2636/api/publicaciones/{{publicationId}}",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "2636",
+            "path": ["api", "publicaciones", "{{publicationId}}"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Delete Publication",
+        "request": {
+          "method": "DELETE",
+          "header": [
+            { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+          ],
+          "url": {
+            "raw": "http://localhost:2636/api/publicaciones/{{publicationId}}",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "2636",
+            "path": ["api", "publicaciones", "{{publicationId}}"]
+          }
+        },
+        "response": []
+      }
+    ]
+  }
+  
