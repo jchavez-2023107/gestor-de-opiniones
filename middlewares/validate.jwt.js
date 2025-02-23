@@ -1,42 +1,46 @@
-//Validar los tokens
-//Declarar variables y funciones antes de usarlas.
 "use strict";
 
 import jwt from "jsonwebtoken";
+import User from "../src/users/user.model.js";
 
 export const validateJWT = async (req, res, next) => {
   try {
-    // Obtener la llave de acceso privada al token
-    let secretKey = process.env.SECRET_KEY;
+    const secretKey = process.env.SECRET_KEY;
+    const { authorization } = req.headers;
 
-    // Obtener el token de los headers (cabeceras)
-    let { authorization } = req.headers;
-
-    // Verificar que el token esté presente y tenga el formato correcto
     if (!authorization || !authorization.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Unauthorized - No token provided" });
+      return res
+        .status(401)
+        .json({ message: "Unauthorized - No token provided" });
     }
 
-    // Extraer el token eliminando "Bearer "
-    let token = authorization.split(" ")[1];
+    const token = authorization.split(" ")[1];
+    const decoded = jwt.verify(token, secretKey);
 
-    // Verificar el token
-    let decoded = jwt.verify(token, secretKey);
+    // Cargar el usuario de la base de datos para obtener el valor actual de updatedAt
+    const user = await User.findById(decoded.uid);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized - User not found" });
+    }
+
+    // Comparar tokenVersion del token con el timestamp actual de updatedAt del usuario
+    const currentVersion = user.updatedAt.getTime();
+    if (decoded.tokenVersion < currentVersion) {
+      return res
+        .status(401)
+        .json({ message: "Token is outdated, please re-login" });
+    }
 
     // Inyectar en la solicitud el usuario autenticado
     req.user = {
-      id: decoded.uid,   // Usamos el `uid` del token
+      id: decoded.uid,
       username: decoded.username,
-      role: decoded.role
+      role: decoded.role,
     };
 
-    // Continuar con la siguiente función
     next();
   } catch (err) {
     console.error("❌ JWT Error:", err);
     return res.status(401).json({ message: "Invalid credentials" });
   }
 };
-
-
-//200-204, 400-418 y 500-505 códigos
