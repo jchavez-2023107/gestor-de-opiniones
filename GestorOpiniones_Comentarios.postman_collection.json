@@ -1,0 +1,198 @@
+{
+    "info": {
+      "_postman_id": "e36702bd-4af2-4e74-9c86-b1ed2efbb7da",
+      "name": "Gestor de Opiniones - Comentarios",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Login (User or Admin)",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/x-www-form-urlencoded",
+              "type": "text"
+            }
+          ],
+          "body": {
+            "mode": "urlencoded",
+            "urlencoded": [
+              {
+                "key": "userlogin",
+                "value": "mpiegrande",
+                "type": "text",
+                "description": "Coloca aquí el username o email de tu usuario"
+              },
+              {
+                "key": "password",
+                "value": "12345678Aa!",
+                "type": "text",
+                "description": "Contraseña del usuario"
+              }
+            ]
+          },
+          "url": {
+            "raw": "http://localhost:2636/api/auth/login",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "2636",
+            "path": [
+              "api",
+              "auth",
+              "login"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Create Comment",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/x-www-form-urlencoded",
+              "type": "text"
+            },
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}",
+              "type": "text"
+            }
+          ],
+          "body": {
+            "mode": "urlencoded",
+            "urlencoded": [
+              {
+                "key": "publication",
+                "value": "{{publicationId}}",
+                "type": "text",
+                "description": "ID de la publicación en la que se comenta"
+              },
+              {
+                "key": "text",
+                "value": "Mi comentario de prueba",
+                "type": "text",
+                "description": "Contenido del comentario"
+              }
+            ]
+          },
+          "url": {
+            "raw": "http://localhost:2636/api/comentarios",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "2636",
+            "path": [
+              "api",
+              "comentarios"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Get Comments by Publication",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:2636/api/comentarios?publication={{publicationId}}",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "2636",
+            "path": [
+              "api",
+              "comentarios"
+            ],
+            "query": [
+              {
+                "key": "publication",
+                "value": "{{publicationId}}"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Update Comment",
+        "request": {
+          "method": "PUT",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/x-www-form-urlencoded",
+              "type": "text"
+            },
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}",
+              "type": "text"
+            }
+          ],
+          "body": {
+            "mode": "urlencoded",
+            "urlencoded": [
+              {
+                "key": "text",
+                "value": "Comentario actualizado",
+                "type": "text",
+                "description": "Nuevo contenido del comentario"
+              }
+            ]
+          },
+          "url": {
+            "raw": "http://localhost:2636/api/comentarios/{{commentId}}",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "2636",
+            "path": [
+              "api",
+              "comentarios",
+              "{{commentId}}"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Delete Comment",
+        "request": {
+          "method": "DELETE",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}",
+              "type": "text"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:2636/api/comentarios/{{commentId}}",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "2636",
+            "path": [
+              "api",
+              "comentarios",
+              "{{commentId}}"
+            ]
+          }
+        },
+        "response": []
+      }
+    ]
+  }
+  
