@@ -4,6 +4,7 @@
 // Importa aquí todas las rutas que quieras unificar
 import authRoutes from "../src/auth/auth.routes.js";
 import userRoutes from "../src/users/user.routes.js";
+import categoriaRoutes from "./categorias/categoria.routes.js";
 // ... y así con más rutas (publicaciones, comentarios, categorías, etc.)
 
 /**
@@ -13,6 +14,7 @@ import userRoutes from "../src/users/user.routes.js";
 export const rutasGenerales = (app) => {
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
+  app.use("/api/categorias", categoriaRoutes);
   // app.use("/api/publicaciones", publicacionesRoutes);
   // app.use("/api/comentarios", comentariosRoutes);
   // etc...

@@ -1,0 +1,153 @@
+{
+  "info": {
+    "_postman_id": "d9f4c63e-7c99-4bd5-b8d2-1f2a2e3d0d3a",
+    "name": "Gestor de Opiniones - Categorías",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Admin Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "userlogin", "value": "mperez", "type": "text" },
+            { "key": "password", "value": "12345678Aa!", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:2636/api/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "2636",
+          "path": ["api", "auth", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Category",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "name", "value": "Deportes", "type": "text" },
+            {
+              "key": "description",
+              "value": "Categoría para publicaciones deportivas",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:2636/api/categorias",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "2636",
+          "path": ["api", "categorias"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Categories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:2636/api/categorias",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "2636",
+          "path": ["api", "categorias"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Category",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "name", "value": "Actualizado Deportes", "type": "text" },
+            {
+              "key": "description",
+              "value": "Categoría de deportes actualizada",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:2636/api/categorias/{{categoryId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "2636",
+          "path": ["api", "categorias", "{{categoryId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Category",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:2636/api/categorias/{{categoryId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "2636",
+          "path": ["api", "categorias", "{{categoryId}}"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
