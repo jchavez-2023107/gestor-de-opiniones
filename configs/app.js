@@ -21,7 +21,7 @@ function configs(app) {
   app.use(express.urlencoded({ extended: true })); // Para x-www-form-urlencoded
 
   // (Opcional) Rate limiting
-  // app.use(limiter);
+  app.use(limiter);
 }
 
 /**
