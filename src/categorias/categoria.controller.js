@@ -111,8 +111,8 @@ export const updateCategoria = async (req, res) => {
 
 /**
  * Eliminar una categoría.
- * Al eliminar, se reasignan todas las publicaciones que pertenecían a esta categoría
- * a la categoría de control de eliminación y se marcan como inactivas (active: false).
+ * - Al eliminar, se reasignan todas las publicaciones que pertenecían a esta categoría
+ *   a la categoría por defecto "categoría eliminada" y se marcan como inactivas (active: false).
  */
 export const deleteCategoria = async (req, res) => {
   try {
@@ -122,38 +122,39 @@ export const deleteCategoria = async (req, res) => {
     if (!categoriaToDelete) {
       return res.status(404).json({ message: "Category not found" });
     }
-    // No se permite eliminar las categorías por defecto
-    if (
-      categoriaToDelete.name.toLowerCase() === "categoría predeterminada" ||
-      categoriaToDelete.name.toLowerCase() === "categoría eliminada"
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Default categories cannot be deleted" });
+
+    // Evitar eliminar la categoría por defecto
+    if (categoriaToDelete.name.toLowerCase() === "categoría eliminada" ||
+        categoriaToDelete.name.toLowerCase() === "categoría predeterminada") {
+      return res.status(400).json({ message: "Default categories cannot be deleted" });
     }
 
-    // Asegurarse de que existan las categorías por defecto
-    const { defaultEliminada } = await ensureDefaultCategorias();
+    // Buscar o crear la categoría "categoría eliminada"
+    let defaultEliminada = await Categoria.findOne({ name: { $regex: /^categoría eliminada$/i } });
+    if (!defaultEliminada) {
+      defaultEliminada = new Categoria({
+        name: "categoría eliminada",
+        description: "Categoría para publicaciones de categorías eliminadas"
+      });
+      await defaultEliminada.save();
+    }
 
-    // Reasignar todas las publicaciones de la categoría eliminada a la categoría de control de eliminación,
-    // y marcar dichas publicaciones como inactivas.
+    // Reasignar las publicaciones que tenían esta categoría
+    // Se marca active: false si así lo deseas
     await Publicacion.updateMany(
-      { categoria: categoriaToDelete._id },
-      { categoria: defaultEliminada._id, active: false }
+      { category: categoriaToDelete._id },
+      { category: defaultEliminada._id }
     );
 
-    // Eliminar la categoría
+    // Eliminar la categoría original
     await Categoria.findByIdAndDelete(id);
 
     res.status(200).json({
-      message:
-        "Category deleted successfully; associated publications reassigned to default elimination category",
+      message: "Category deleted successfully; associated publications moved to 'categoría eliminada'"
     });
   } catch (error) {
     console.error("Error deleting category:", error);
-    res
-      .status(500)
-      .json({ message: "Error deleting category", error: error.message });
+    res.status(500).json({ message: "Error deleting category", error: error.message });
   }
 };
 
